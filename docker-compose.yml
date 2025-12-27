@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  backend-vetgerenciamento:
+    container_name: backend-vetgerenciamento
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3077:3000"
+    restart: always
+    volumes:
+      - ./:/app
+      - /app/node_modules
