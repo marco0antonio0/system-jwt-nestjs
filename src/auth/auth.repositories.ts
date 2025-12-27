@@ -44,7 +44,6 @@ export class UserRepository {
   async createUser(data: RegisterDto): Promise<User> {
     const { name, email, password } = data;
 
-    // (Opcional) reforçar unicidade
     const existsEmail = await this.userModel.findOne({ where: { email } });
     if (existsEmail) throw new Error('Email já cadastrado');
     const existsUser = await this.userModel.findOne({ where: { name } });

@@ -15,14 +15,14 @@ export class AuthService {
     return bcrypt.compare(password, hashedPassword);
   }
 
-  private encode(payload: object, options?: JwtSignOptions): string {
+  encode(payload: object, options?: JwtSignOptions): string {
     return this.jwtService.sign(payload, {
       expiresIn: '24h',
       ...options,
     });
   }
 
-  private decode(token: string): any {
+  decode(token: string): any {
     try {
       return this.jwtService.decode(token);
     } catch (e) {
@@ -31,13 +31,7 @@ export class AuthService {
   }
 
   async register(data: RegisterDto) {
-    const { name, email, password } = data;
-    // Se já existe conta confirmada com o mesmo name, bloqueia
-    // const nameExists = await this.userRepository.findUserByName(name);
-    // if (nameExists) {
-    //   throw new ConflictException('Já existe uma conta com este name. Não é possível cadastrar com este name.');
-    // }
-
+    const {  email } = data;
     const existingUser = await this.userRepository.findUser(email);
     if (existingUser) {
       throw new ConflictException('Usuário já existe');
@@ -88,7 +82,6 @@ export class AuthService {
       throw new NotFoundException('Usuário alvo não encontrado');
     }
 
-    // 🔐 Regras de permissão hierárquicas
     if (requesterRole >= 4) {
       if (newRole >= 4) {
         throw new ForbiddenException('Você não pode atribuir essa função');
